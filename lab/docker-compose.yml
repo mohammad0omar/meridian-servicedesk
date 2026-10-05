@@ -32,6 +32,17 @@ services:
       - static:/srv/static:ro
     depends_on:
       - app
+      - php
+
+  # A PHP interpreter for the upload lab. The media directory is shared with it,
+  # so a request that nginx routes to this service executes the uploaded file.
+  # Nothing else in the course is PHP; this exists only so the classic
+  # upload-a-web-shell attack (file-upload lab, B1) is reproducible end to end.
+  php:
+    image: php:8.3-fpm-alpine
+    restart: unless-stopped
+    volumes:
+      - media:/srv/media:ro
 
   app:
     build:
